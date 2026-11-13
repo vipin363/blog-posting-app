@@ -43,13 +43,13 @@ const [searchTerm, setSearchTerm] = useState("");
     <div>
       <p>Are you sure you want to delete this blog?</p>
 
-      <button
+      <button  className="toast-confirm-btn"
         onClick={() => confirmDelete(blogId)}
       >
         Confirm Delete
       </button>
 
-      <button onClick={() => toast.dismiss()}>
+      <button  className="toast-cancel-btn" onClick={() => toast.dismiss()}>
         Cancel
       </button>
     </div>,
@@ -88,27 +88,27 @@ const filteredBlogs = blogs.filter((blog) => {
 });
 
   return (
-    <div>
-      <h1>My Blogs</h1>
-      <input
+    <div className="blog-container">
+      <h1 className="page-title">My Blogs</h1>
+      <input   className="search-input"
   type="text"
   placeholder="Search blogs by title or content..."
   value={searchTerm}
   onChange={(e) => setSearchTerm(e.target.value)}
 />
 
-      <button onClick={() => navigate("/add-blog")}>+ Add New Blog</button>
+      <button className="add-blog-btn" onClick={() => navigate("/add-blog")}>+ Add New Blog</button>
       {blogs.length === 0 && searchTerm.trim() !== "" ? (
         <p>No blogs found.</p>
       ) : (
        filteredBlogs.map((blog) => (
-          <div key={blog.id}>
+          <div className="blog-card" key={blog.id}>
             <h2>{blog.title}</h2>
             <p>{blog.content}</p>
-            <button onClick={() => navigate(`/edit-blog/${blog.id}`)}>
+            <button className="edit-btn" onClick={() => navigate(`/edit-blog/${blog.id}`)}>
               Edit
             </button>
-            <button onClick={() => handleDelete(blog.id)}>
+            <button className="delete-btn" onClick={() => handleDelete(blog.id)}>
   Delete
 </button>
           </div>

@@ -9,6 +9,7 @@ import AddBlog from "./pages/AddBlog";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import EditBlog from "./pages/EditBlog";
+import "./App.css";
 
 function App() {
   return (

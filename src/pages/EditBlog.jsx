@@ -45,6 +45,7 @@ function EditBlog() {
   if (loading) return <p>Loading blog...</p>;
 
 
+
 const handleUpdate = async (e) => {
   e.preventDefault();
 
@@ -70,6 +71,35 @@ const handleUpdate = async (e) => {
     return;
   }
 
+  toast.info(
+    <div>
+      <p>Are you sure you want to update this blog?</p>
+
+      <button
+        className="toast-confirm-btn"
+        onClick={() => confirmUpdate(trimmedTitle, trimmedContent)}
+      >
+        Yes, Update
+      </button>
+
+      <button
+        className="toast-cancel-btn"
+        onClick={() => toast.dismiss()}
+      >
+        Cancel
+      </button>
+    </div>,
+    {
+      autoClose: false,
+      closeOnClick: false,
+      draggable: false
+    }
+  );
+};
+
+const confirmUpdate = async (trimmedTitle, trimmedContent) => {
+  toast.dismiss();
+
   try {
     setLoading(true);
 
@@ -93,14 +123,15 @@ const handleUpdate = async (e) => {
 };
 
 
+
   return (
-    <div>
-      <h1>Edit Blog</h1>
+    <div className="form-container">
+      <h1 className="form-title">Edit Blog</h1>
 
      <form onSubmit={handleUpdate}>
   <div>
     <label>Blog Heading</label>
-    <input
+    <input className="form-input"
       type="text"
       value={title}
       onChange={(e) => setTitle(e.target.value)}
@@ -109,17 +140,17 @@ const handleUpdate = async (e) => {
 
   <div>
     <label>Blog Description</label>
-    <textarea
+    <textarea className="form-textarea"
       value={content}
       onChange={(e) => setContent(e.target.value)}
       rows="6"
     />
   </div>
 
-  <button type="submit" disabled={loading}>
+  <button className="form-submit-btn" type="submit" disabled={loading}>
     {loading ? "Updating..." : "Update Blog"}
   </button>
-  <button
+  <button className="form-cancel-btn"
   type="button"
   onClick={() => navigate("/")}
 >

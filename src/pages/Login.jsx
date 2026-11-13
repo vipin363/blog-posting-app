@@ -1,11 +1,13 @@
 import { useState } from "react";
 import { signInWithEmailAndPassword } from "firebase/auth";
 import { auth } from "../firebase/firebaseConfig";
-import { toast, ToastContainer } from "react-toastify";
-import "react-toastify/dist/ReactToastify.css";
+import { toast } from "react-toastify";
+import { useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
+
 
 function Login() {
-
+   const navigate = useNavigate();
   const [formData, setFormData] = useState({
     email: "",
     password: ""
@@ -40,6 +42,8 @@ const handleSubmit = async (e) => {
       password: ""
     });
 
+navigate('/')
+
   } catch (error) {
     console.error(error);
 
@@ -55,13 +59,18 @@ const handleSubmit = async (e) => {
   }
 };
 
-  return (
-    <div>
-      <h1>Welcome Back</h1>
+ 
+return (
+  <div className="auth-container">
+    <div className="auth-card">
+      <h1 className="auth-title">Welcome Back</h1>
+      <p className="auth-subtitle">Login to your account</p>
 
       <form onSubmit={handleSubmit}>
 
+        <label>Email Address</label>
         <input
+          className="auth-input"
           type="email"
           name="email"
           placeholder="Enter your email"
@@ -70,7 +79,9 @@ const handleSubmit = async (e) => {
           required
         />
 
+        <label>Password</label>
         <input
+          className="auth-input"
           type="password"
           name="password"
           placeholder="Enter your password"
@@ -79,16 +90,19 @@ const handleSubmit = async (e) => {
           required
         />
 
-        <button type="submit">
+        <button className="auth-btn" type="submit">
           Login
         </button>
 
-      </form>
-<ToastContainer position="top-right" />
-    </div>
+        <p className="auth-link">
+  Don't have an account? <Link to="/register">Sign up</Link>
+</p>
 
-    
-  );
+      </form>
+    </div>
+  </div>
+);
+
 }
 
 export default Login;

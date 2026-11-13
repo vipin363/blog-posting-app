@@ -2,10 +2,13 @@
 import { useState } from "react";
 import { createUserWithEmailAndPassword, updateProfile } from "firebase/auth";
 import { auth } from "../firebase/firebaseConfig";
-import { toast, ToastContainer } from "react-toastify";
-import "react-toastify/dist/ReactToastify.css";
+import { toast } from "react-toastify";
+import { Link } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
+
 
 function Register() {
+    const navigate  =useNavigate()
   const [formData, setFormData] = useState({
     name: "",
     email: "",
@@ -88,7 +91,7 @@ const validateForm = () => {
         password: "",
         confirmPassword: ""
       });
-
+      navigate('/')
     }catch (error) {
   if (error.code === "auth/email-already-in-use") {
     toast.error("Email already registered!");
@@ -100,12 +103,17 @@ const validateForm = () => {
 }
   };
 
-  return (
-    <div>
-      <h1>Create Account</h1>
+  
+return (
+  <div className="auth-container">
+    <div className="auth-card">
+      <h1 className="auth-title">Create Account</h1>
+     
 
       <form onSubmit={handleSubmit}>
+        <label>Full Name</label>
         <input
+          className="auth-input"
           type="text"
           name="name"
           placeholder="Enter your name"
@@ -114,7 +122,9 @@ const validateForm = () => {
           required
         />
 
+        <label>Email Address</label>
         <input
+          className="auth-input"
           type="email"
           name="email"
           placeholder="Enter your email"
@@ -123,7 +133,9 @@ const validateForm = () => {
           required
         />
 
+        <label>Password</label>
         <input
+          className="auth-input"
           type="password"
           name="password"
           placeholder="Enter your password"
@@ -132,23 +144,29 @@ const validateForm = () => {
           required
         />
 
+        <label>Confirm Password</label>
         <input
-  type="password"
-  name="confirmPassword"
-  placeholder="Confirm Password"
-  value={formData.confirmPassword}
-  onChange={handleChange}
-  required
-/>
+          className="auth-input"
+          type="password"
+          name="confirmPassword"
+          placeholder="Confirm your password"
+          value={formData.confirmPassword}
+          onChange={handleChange}
+          required
+        />
 
-        <button type="submit">
+        <button className="auth-btn" type="submit">
           Register
         </button>
-      </form>
 
-      <ToastContainer position="top-right" />
+        <p className="auth-link">
+          Already have an account? <Link to="/login">Login</Link>
+        </p>
+      </form>
     </div>
-  );
+  </div>
+);
+
 }
 
 export default Register;

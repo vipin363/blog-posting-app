@@ -84,13 +84,13 @@ if (trimmedTitle.length < 4) {
 
 
   return (
-    <div>
+    <div className="form-container">
       <h1>Add New Blog</h1>
 
-      <form onSubmit={handleSubmit}>
+      <form className="form-title" onSubmit={handleSubmit}>
         <div>
           <label>Blog Title</label>
-          <input
+          <input className="form-input"
             type="text"
             value={title}
             onChange={(e) => setTitle(e.target.value)}
@@ -100,7 +100,7 @@ if (trimmedTitle.length < 4) {
 
         <div>
           <label>Blog Content</label>
-          <textarea
+          <textarea className="form-textarea"
             value={content}
             onChange={(e) => setContent(e.target.value)}
             placeholder="Write your blog..."
@@ -108,10 +108,10 @@ if (trimmedTitle.length < 4) {
           />
         </div>
 
-        <button type="submit" disabled={loading}>
+        <button className="form-submit-btn" type="submit" disabled={loading}>
           {loading ? "Adding..." : "Add Blog"}
         </button>
-        <button
+        <button className="form-cancel-btn"
   type="button"
   onClick={() => navigate("/")}
 >
