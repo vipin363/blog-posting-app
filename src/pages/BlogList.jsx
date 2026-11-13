@@ -10,7 +10,7 @@ function BlogList() {
   const [blogs, setBlogs] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
-
+const [searchTerm, setSearchTerm] = useState("");
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -78,14 +78,30 @@ const confirmDelete = async (blogId) => {
   }
 };
 
+const filteredBlogs = blogs.filter((blog) => {
+  const search = searchTerm.toLowerCase().trim();
+
+  return (
+    blog.title.toLowerCase().includes(search) ||
+    blog.content.toLowerCase().includes(search)
+  );
+});
+
   return (
     <div>
       <h1>My Blogs</h1>
+      <input
+  type="text"
+  placeholder="Search blogs by title or content..."
+  value={searchTerm}
+  onChange={(e) => setSearchTerm(e.target.value)}
+/>
+
       <button onClick={() => navigate("/add-blog")}>+ Add New Blog</button>
-      {blogs.length === 0 ? (
-        <p>You haven't added any blogs yet.</p>
+      {blogs.length === 0 && searchTerm.trim() !== "" ? (
+        <p>No blogs found.</p>
       ) : (
-        blogs.map((blog) => (
+       filteredBlogs.map((blog) => (
           <div key={blog.id}>
             <h2>{blog.title}</h2>
             <p>{blog.content}</p>
