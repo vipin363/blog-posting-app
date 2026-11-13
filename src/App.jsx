@@ -8,6 +8,7 @@ import BlogList from "./pages/BlogList";
 import AddBlog from "./pages/AddBlog";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import EditBlog from "./pages/EditBlog";
 
 function App() {
   return (
@@ -24,6 +25,7 @@ function App() {
          <Route element={<ProtectedRoute />}>
           <Route path="/" element={<BlogList />} />
           <Route path="/add-blog" element={<AddBlog />} />
+          <Route path="/edit-blog/:id" element={<EditBlog />} />       
         </Route>
       </Routes>
     </BrowserRouter>

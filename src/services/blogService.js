@@ -6,10 +6,13 @@ import {
   query,
   where,
   addDoc,
-  serverTimestamp
+  serverTimestamp,
+   doc,
+  getDoc
 } from "firebase/firestore";
 
 import { db } from "../firebase/firebaseConfig";
+import { updateDoc } from "firebase/firestore";
 
 // Fetch logged-in user's blogs
 export const getBlogs = async (userId) => {
@@ -63,3 +66,63 @@ export const addBlog = async (blogData, userId) => {
   return docRef.id;
 };
 
+export const getBlogById = async (blogId) => {
+  const blogRef = doc(db, "blogs", blogId);
+
+  const snapshot = await getDoc(blogRef);
+
+  if (!snapshot.exists()) {
+    throw new Error("Blog not found");
+  }
+
+  return {
+    id: snapshot.id,
+    ...snapshot.data(),
+  };
+};
+
+
+
+
+
+export const updateBlog = async (blogId, blogData, userId) => {
+  const blogRef = doc(db, "blogs", blogId);
+
+  const snapshot = await getDoc(blogRef);
+
+  if (!snapshot.exists()) {
+    throw new Error("Blog not found");
+  }
+
+  // Check blog ownership
+  if (snapshot.data().authorId !== userId) {
+    throw new Error("You are not allowed to edit this blog");
+  }
+
+  // Check duplicate heading
+  const q = query(
+    collection(db, "blogs"),
+    where("authorId", "==", userId)
+  );
+
+  const blogsSnapshot = await getDocs(q);
+
+  const isDuplicate = blogsSnapshot.docs.some((blog) => {
+    return (
+      blog.id !== blogId &&
+      blog.data().title.trim().toLowerCase() ===
+        blogData.title.trim().toLowerCase()
+    );
+  });
+
+  if (isDuplicate) {
+    throw new Error("A blog with this heading already exists");
+  }
+
+  // Update blog
+  await updateDoc(blogRef, {
+    title: blogData.title.trim(),
+    content: blogData.content.trim(),
+    updatedAt: serverTimestamp(),
+  });
+};
