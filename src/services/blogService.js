@@ -8,11 +8,12 @@ import {
   addDoc,
   serverTimestamp,
    doc,
-  getDoc
+  getDoc,
+   updateDoc,
+  deleteDoc
 } from "firebase/firestore";
 
 import { db } from "../firebase/firebaseConfig";
-import { updateDoc } from "firebase/firestore";
 
 // Fetch logged-in user's blogs
 export const getBlogs = async (userId) => {
@@ -125,4 +126,25 @@ export const updateBlog = async (blogId, blogData, userId) => {
     content: blogData.content.trim(),
     updatedAt: serverTimestamp(),
   });
+};
+
+
+// Delete blog
+export const deleteBlog = async (blogId, userId) => {
+  const blogRef = doc(db, "blogs", blogId);
+
+  // Get the blog
+  const snapshot = await getDoc(blogRef);
+
+  if (!snapshot.exists()) {
+    throw new Error("Blog not found");
+  }
+
+  // Check blog ownership
+  if (snapshot.data().authorId !== userId) {
+    throw new Error("You are not allowed to delete this blog");
+  }
+
+  // Delete the blog
+  await deleteDoc(blogRef);
 };

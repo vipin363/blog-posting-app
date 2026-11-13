@@ -1,7 +1,8 @@
 import { useContext, useEffect, useState } from "react";
 import { AuthContext } from "../context/AuthContext";
-import { getBlogs } from "../services/blogService";
 import { useNavigate } from "react-router-dom";
+import { getBlogs, deleteBlog } from "../services/blogService";
+import { toast } from "react-toastify";
 
 function BlogList() {
   const { user } = useContext(AuthContext);
@@ -37,6 +38,46 @@ function BlogList() {
 
   if (error) return <p>{error}</p>;
 
+  const handleDelete = (blogId) => {
+  toast.info(
+    <div>
+      <p>Are you sure you want to delete this blog?</p>
+
+      <button
+        onClick={() => confirmDelete(blogId)}
+      >
+        Confirm Delete
+      </button>
+
+      <button onClick={() => toast.dismiss()}>
+        Cancel
+      </button>
+    </div>,
+    {
+      autoClose: false,
+      closeOnClick: false,
+      draggable: false,
+    }
+  );
+};
+
+const confirmDelete = async (blogId) => {
+  toast.dismiss();
+
+  try {
+    await deleteBlog(blogId, user.uid);
+
+    setBlogs((prevBlogs) =>
+      prevBlogs.filter((blog) => blog.id !== blogId)
+    );
+
+    toast.success("Blog deleted successfully!");
+  } catch (error) {
+    console.error("Delete error:", error);
+    toast.error(error.message || "Failed to delete blog");
+  }
+};
+
   return (
     <div>
       <h1>My Blogs</h1>
@@ -51,6 +92,9 @@ function BlogList() {
             <button onClick={() => navigate(`/edit-blog/${blog.id}`)}>
               Edit
             </button>
+            <button onClick={() => handleDelete(blog.id)}>
+  Delete
+</button>
           </div>
         ))
       )}
