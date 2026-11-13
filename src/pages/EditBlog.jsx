@@ -119,6 +119,12 @@ const handleUpdate = async (e) => {
   <button type="submit" disabled={loading}>
     {loading ? "Updating..." : "Update Blog"}
   </button>
+  <button
+  type="button"
+  onClick={() => navigate("/")}
+>
+  Cancel
+</button>
 </form>
     </div>
   );

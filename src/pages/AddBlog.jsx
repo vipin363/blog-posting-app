@@ -111,6 +111,12 @@ if (trimmedTitle.length < 4) {
         <button type="submit" disabled={loading}>
           {loading ? "Adding..." : "Add Blog"}
         </button>
+        <button
+  type="button"
+  onClick={() => navigate("/")}
+>
+  Cancel
+</button>
       </form>
     </div>
   );
