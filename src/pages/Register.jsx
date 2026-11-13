@@ -9,7 +9,8 @@ function Register() {
   const [formData, setFormData] = useState({
     name: "",
     email: "",
-    password: ""
+    password: "",
+    confirmPassword: ""
   });
 
   const handleChange = (e) => {
@@ -21,8 +22,52 @@ function Register() {
     });
   };
 
+
+const validateForm = () => {
+
+  const nameRegex = /^[A-Za-z ]+$/;
+
+  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+  const passwordRegex =
+    /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
+
+  // Name validation
+  if (!nameRegex.test(formData.name.trim())) {
+    toast.error("Name must contain only letters and spaces");
+    return false;
+  }
+
+  // Email validation
+  if (!emailRegex.test(formData.email.trim())) {
+    toast.error("Please enter a valid email");
+    return false;
+  }
+
+  // Password validation
+  if (!passwordRegex.test(formData.password)) {
+    toast.error(
+      "Password must contain 8 characters, uppercase, lowercase, number and special character"
+    );
+    return false;
+  }
+
+  // Confirm password validation
+  if (formData.password !== formData.confirmPassword) {
+    toast.error("Passwords do not match");
+    return false;
+  }
+
+  return true;
+};
+
+
   const handleSubmit = async (e) => {
     e.preventDefault();
+
+         if (!validateForm()) {
+    return;
+  }
 
     try {
       const userCredential = await createUserWithEmailAndPassword(
@@ -40,13 +85,19 @@ function Register() {
       setFormData({
         name: "",
         email: "",
-        password: ""
+        password: "",
+        confirmPassword: ""
       });
 
-    } catch (error) {
-      console.error(error);
-      toast.error(error.message);
-    }
+    }catch (error) {
+  if (error.code === "auth/email-already-in-use") {
+    toast.error("Email already registered!");
+  } else {
+    toast.error(error.message);
+  }
+
+  console.error(error);
+}
   };
 
   return (
@@ -80,6 +131,15 @@ function Register() {
           onChange={handleChange}
           required
         />
+
+        <input
+  type="password"
+  name="confirmPassword"
+  placeholder="Confirm Password"
+  value={formData.confirmPassword}
+  onChange={handleChange}
+  required
+/>
 
         <button type="submit">
           Register
