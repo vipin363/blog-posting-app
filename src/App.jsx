@@ -6,11 +6,18 @@ import Navbar from "./components/Navbar";
 import ProtectedRoute from "./components/ProtectedRoute";
 import BlogList from "./pages/BlogList";
 import AddBlog from "./pages/AddBlog";
+import { ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 function App() {
   return (
     <BrowserRouter>
      <Navbar />
+     <ToastContainer
+    position="top-right"
+    autoClose={3000}
+    theme="dark"
+  />
       <Routes>
         <Route path="/register" element={<Register />} />
         <Route path="/login" element={<Login />} />
